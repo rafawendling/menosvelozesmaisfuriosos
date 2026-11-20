@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jogos 2026</title>
+<title>Menos Velozes Mais Furiosos - Estatísticas 2026</title>
 <meta name="description" content="Estatísticas e rankings dos jogos de sábado — Azul x Verde">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
 <style>
 :root{
-  --navy:#14213d; --navy2:#1f3864; --bg:#f3f5f9; --card:#fff; --ink:#1b2333; --muted:#6b7385; --line:#e3e7ef;
+  --navy:#3b3e44; --navy2:#6e727a; --bg:#f3f5f9; --card:#fff; --ink:#1b2333; --muted:#6b7385; --line:#e3e7ef;
   --azul:#2f6fb5; --azul-l:#e3eefa; --verde:#3f8f3a; --verde-l:#e4f2e1; --laranja:#e0701f;
   --ouro:#f6c94c; --prata:#cfd4dc; --bronze:#e5a073; --cinza:#a3a9b5; --red:#c0392b;
   --radius:14px; --shadow:0 1px 2px rgba(20,33,61,.06),0 4px 14px rgba(20,33,61,.06);
@@ -17,7 +17,7 @@
 html{scroll-behavior:smooth}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4}
 a{color:inherit}
-header.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#24508f 100%);color:#fff;padding:28px 16px 70px;position:relative;overflow:hidden}
+header.hero{background:linear-gradient(135deg,#4a4d53 0%,#6e727a 60%,#8a8e95 100%);color:#fff;padding:28px 16px 70px;position:relative;overflow:hidden}
 header.hero::after{content:"";position:absolute;inset:auto -10% -60% auto;width:420px;height:420px;border-radius:50%;
   background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%)}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
@@ -28,9 +28,9 @@ header.hero::after{content:"";position:absolute;inset:auto -10% -60% auto;width:
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:-48px;position:relative;z-index:2}
 .kpi{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px}
 .kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
-.kpi .v{font-size:28px;font-weight:800;color:var(--navy2);margin-top:2px}
+.kpi .v{font-size:28px;font-weight:800;color:var(--navy);margin-top:2px}
 .kpi .s{font-size:12px;color:var(--muted)}
-.kpi.azul{border-top:4px solid var(--azul)} .kpi.verde{border-top:4px solid var(--verde)} .kpi.emp{border-top:4px solid var(--cinza)}
+.kpi.azul{border-top:4px solid var(--azul)} .kpi.verde{border-top:4px solid var(--verde)} .kpi.emp{border-top:4px solid #c9971c}
 nav.tabs{position:sticky;top:0;z-index:20;background:rgba(243,245,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-top:18px}
 nav.tabs .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
 nav.tabs button{flex:0 0 auto;border:0;background:transparent;padding:8px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
@@ -104,7 +104,7 @@ dialog::backdrop{background:rgba(10,18,35,.55)}
 .dlg-b{padding:16px 18px;max-height:70vh;overflow:auto}
 .mini{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .mini div{background:#f3f5f9;border-radius:10px;padding:8px;text-align:center}
-.mini b{display:block;font-size:19px;color:var(--navy2)} .mini span{font-size:11px;color:var(--muted)}
+.mini b{display:block;font-size:19px;color:var(--navy)} .mini span{font-size:11px;color:var(--muted)}
 .res-V{color:var(--verde);font-weight:700} .res-D{color:var(--red);font-weight:700} .res-E{color:var(--muted);font-weight:700}
 @media (max-width:600px){
   .grid3,.grid2{grid-template-columns:1fr}
@@ -120,7 +120,7 @@ dialog::backdrop{background:rgba(10,18,35,.55)}
   <div class="wrap brand">
     <img id="escudo" src="escudo.png" alt="Escudo" onerror="this.style.display='none'">
     <div>
-      <h1 id="titulo">⚽ Jogos 2026</h1>
+      <h1 id="titulo">⚽ Menos Velozes Mais Furiosos - Estatísticas 2026</h1>
       <div class="sub" id="atualizado">Carregando dados…</div>
     </div>
   </div>
@@ -195,7 +195,7 @@ dialog::backdrop{background:rgba(10,18,35,.55)}
    CONFIGURAÇÃO — altere aqui se precisar
    ===================================================================== */
 const CONFIG = {
-  titulo: "Jogos 2026",              // nome que aparece no topo
+  titulo: "Menos Velozes Mais Furiosos - Estatísticas 2026",              // nome que aparece no topo
   arquivo: "Jogos_2026.xlsx",        // nome da planilha enviada ao GitHub
   minPresencaPadrao: 0.30            // usado só se a planilha não tiver a célula T3 da aba Classificação
 };
@@ -480,7 +480,6 @@ function renderDestaques(){
     top5("Mais derrotas", "💥", linha().sort(by(desc(p => p.L.d))), p => p.L.d) +
     top5("Melhor média de gols", "🎯", ok.sort(by(desc(p => p.L.gpj))), p => dec(p.L.gpj)) +
     top5("Mais presentes", "📅", S.players.filter(p => p.jt).sort(by(desc(p => p.jt))), p => `${p.jt} de ${S.total}`) +
-    top5("Mais advertências de uniforme", "👕", S.players.filter(p => p.adv).sort(by(desc(p => p.adv))), p => p.adv) +
     `<div class="card top5"><h3><span class="ico">📌</span>Recordes</h3><ol style="list-style:none;padding:0">
       ${maiorGoleada ? `<li class="rec"><span>Maior diferença</span><b>${j(maiorGoleada)}</b></li>` : ""}
       ${maisGols ? `<li class="rec"><span>Jogo com mais gols</span><b>${j(maisGols)}</b></li>` : ""}
