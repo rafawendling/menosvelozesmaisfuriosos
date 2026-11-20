@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jogos 2026</title>
+<meta name="description" content="Estatísticas e rankings dos jogos de sábado — Azul x Verde">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<style>
+:root{
+  --navy:#14213d; --navy2:#1f3864; --bg:#f3f5f9; --card:#fff; --ink:#1b2333; --muted:#6b7385; --line:#e3e7ef;
+  --azul:#2f6fb5; --azul-l:#e3eefa; --verde:#3f8f3a; --verde-l:#e4f2e1; --laranja:#e0701f;
+  --ouro:#f6c94c; --prata:#cfd4dc; --bronze:#e5a073; --cinza:#a3a9b5; --red:#c0392b;
+  --radius:14px; --shadow:0 1px 2px rgba(20,33,61,.06),0 4px 14px rgba(20,33,61,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4}
+a{color:inherit}
+header.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#24508f 100%);color:#fff;padding:28px 16px 70px;position:relative;overflow:hidden}
+header.hero::after{content:"";position:absolute;inset:auto -10% -60% auto;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{width:62px;height:62px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
+.brand h1{margin:0;font-size:clamp(24px,4vw,34px);letter-spacing:.3px}
+.brand .sub{opacity:.8;font-size:14px;margin-top:2px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:-48px;position:relative;z-index:2}
+.kpi{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px}
+.kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.kpi .v{font-size:28px;font-weight:800;color:var(--navy2);margin-top:2px}
+.kpi .s{font-size:12px;color:var(--muted)}
+.kpi.azul{border-top:4px solid var(--azul)} .kpi.verde{border-top:4px solid var(--verde)} .kpi.emp{border-top:4px solid var(--cinza)}
+nav.tabs{position:sticky;top:0;z-index:20;background:rgba(243,245,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-top:18px}
+nav.tabs .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;border:0;background:transparent;padding:8px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
+nav.tabs button.on{background:var(--navy2);color:#fff}
+main{padding:18px 0 40px}
+section.tab{display:none} section.tab.on{display:block}
+h2{font-size:20px;margin:6px 0 12px} h3{font-size:16px;margin:0 0 10px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;min-width:0}
+.card h3 .ico{margin-right:6px}
+.note{font-size:12.5px;color:var(--muted);margin:4px 0 14px}
+.tbl{width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);text-align:center;padding:7px 6px;border-bottom:2px solid var(--line);white-space:nowrap;background:var(--card)}
+td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+td.n,th.n{text-align:left}
+td.main{font-weight:800}
+tr.p1 td{background:#fff6d6} tr.p2 td{background:#f1f3f6} tr.p3 td{background:#fbeadf}
+.pos{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;font-weight:700;font-size:12px;background:#eef1f6}
+tr.p1 .pos{background:var(--ouro)} tr.p2 .pos{background:var(--prata)} tr.p3 .pos{background:var(--bronze)}
+tr.inel td{color:var(--cinza);font-style:italic}
+tr.inel .pos{background:transparent}
+.conv{color:var(--laranja)} tr.inel .conv{color:var(--cinza)}
+.pl{cursor:pointer;font-weight:600} .pl:hover{text-decoration:underline}
+th.sort{cursor:pointer} th.sort:hover{color:var(--ink)}
+.more{margin-top:10px;border:0;background:#eef1f6;border-radius:8px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer;width:100%}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
+.controls label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);font-weight:600;gap:4px}
+.controls input,.controls select{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.controls input[type=range]{padding:0;width:150px}
+.btn{border:0;background:var(--navy2);color:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+.bars .row{display:grid;grid-template-columns:110px 1fr 54px;gap:8px;align-items:center;font-size:13px;margin:5px 0}
+.bars .row .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:14px;border-radius:7px;background:#eef1f6;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bars .v{text-align:right;font-weight:700}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.top5 ol{margin:0;padding-left:20px} .top5 li{margin:4px 0;display:flex;justify-content:space-between;gap:8px}
+.top5 li b{font-variant-numeric:tabular-nums}
+.top5 li.rec{flex-direction:column;gap:0} .top5 li.rec span{font-size:12px;color:var(--muted)}
+.games{display:grid;gap:12px}
+.game{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.game summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 16px;gap:10px}
+.game summary::-webkit-details-marker{display:none}
+.game .d{grid-column:1/-1;font-size:12px;color:var(--muted);text-align:center;margin-bottom:-4px}
+.team{font-weight:800;font-size:15px}
+.team.a{color:var(--azul);text-align:right} .team.v{color:var(--verde)}
+.score{font-size:24px;font-weight:900;font-variant-numeric:tabular-nums;padding:2px 12px;border-radius:10px;background:#eef1f6}
+.win{position:relative} .win::after{content:"🏆";font-size:13px;margin-left:5px}
+.team.a.win::after{content:"";} .team.a.win::before{content:"🏆";font-size:13px;margin-right:5px}
+.lineups{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.lineups ul{list-style:none;margin:0;padding:10px 16px;font-size:13.5px}
+.lineups ul.a{background:var(--azul-l)} .lineups ul.v{background:var(--verde-l)}
+.lineups li{display:flex;justify-content:space-between;gap:6px;padding:3px 0}
+.lineups .num{color:var(--muted);font-size:12px;min-width:22px;display:inline-block}
+.og{color:var(--red);font-size:12px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:#eef1f6;color:var(--muted)}
+.badge.az{background:var(--azul-l);color:var(--azul)} .badge.vd{background:var(--verde-l);color:var(--verde)}
+.warn{background:#fff4e5;border:1px solid #f3c58a;color:#7a4a0c;border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:14px}
+.warn ul{margin:6px 0 0;padding-left:18px}
+#loading{padding:60px 16px;text-align:center;color:var(--muted)}
+#err{display:none;margin:30px auto;max-width:640px}
+footer{color:var(--muted);font-size:12.5px;text-align:center;padding:20px 16px 40px}
+dialog{border:0;border-radius:16px;padding:0;max-width:560px;width:calc(100% - 24px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,18,35,.55)}
+.dlg-h{background:var(--navy2);color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+.dlg-h h3{margin:0;font-size:19px}
+.dlg-h button{background:transparent;border:0;color:#fff;font-size:22px;cursor:pointer}
+.dlg-b{padding:16px 18px;max-height:70vh;overflow:auto}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.mini div{background:#f3f5f9;border-radius:10px;padding:8px;text-align:center}
+.mini b{display:block;font-size:19px;color:var(--navy2)} .mini span{font-size:11px;color:var(--muted)}
+.res-V{color:var(--verde);font-weight:700} .res-D{color:var(--red);font-weight:700} .res-E{color:var(--muted);font-weight:700}
+@media (max-width:600px){
+  .grid3,.grid2{grid-template-columns:1fr}
+  .bars .row{grid-template-columns:90px 1fr 46px}
+  td,th{padding:6px 4px} table{font-size:13px}
+  .mini{grid-template-columns:repeat(2,1fr)}
+  .lineups{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap brand">
+    <img id="escudo" src="escudo.png" alt="Escudo" onerror="this.style.display='none'">
+    <div>
+      <h1 id="titulo">⚽ Jogos 2026</h1>
+      <div class="sub" id="atualizado">Carregando dados…</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap"><div class="kpis" id="kpis"></div></div>
+
+<nav class="tabs"><div class="wrap" id="tabs">
+  <button data-t="classif" class="on">🏆 Classificação</button>
+  <button data-t="goleiros">🧤 Goleiros</button>
+  <button data-t="completo">📋 Ranking completo</button>
+  <button data-t="destaques">📊 Destaques</button>
+  <button data-t="jogos">🗓️ Jogos</button>
+</div></nav>
+
+<main class="wrap">
+  <div id="loading">Carregando planilha…</div>
+  <div id="err" class="warn"></div>
+  <div id="avisos"></div>
+
+  <section class="tab on" id="t-classif">
+    <h2>Classificação geral</h2>
+    <p class="note" id="nota-classif"></p>
+    <div class="grid3" id="classif"></div>
+  </section>
+
+  <section class="tab" id="t-goleiros">
+    <h2>Ranking de goleiros</h2>
+    <p class="note" id="nota-gol"></p>
+    <div class="grid3" id="goleiros"></div>
+  </section>
+
+  <section class="tab" id="t-completo">
+    <h2>Ranking completo</h2>
+    <div class="card">
+      <div class="controls">
+        <label>Buscar jogador<input id="f-busca" type="search" placeholder="Nome…"></label>
+        <label>Ordenar por<select id="f-ord">
+          <option value="pts">Pontos</option><option value="aprov">Aproveitamento</option><option value="pres">Presença</option>
+          <option value="j">Jogos</option><option value="gols">Gols</option><option value="gpj">Média de gols</option>
+          <option value="v">Vitórias</option><option value="e">Empates</option><option value="d">Derrotas</option><option value="nome">Jogador</option>
+        </select></label>
+        <label>Ordem<select id="f-dir"><option value="desc">Maior → menor</option><option value="asc">Menor → maior</option></select></label>
+        <label>Tipo<select id="f-tipo"><option value="">Todos</option><option value="Fixo">Fixos</option><option value="Convidado">Convidados</option></select></label>
+        <label>Presença mínima: <span id="f-pres-v">0%</span><input id="f-pres" type="range" min="0" max="100" step="5" value="0"></label>
+        <button class="btn" id="f-limpar">Limpar filtros</button>
+      </div>
+      <div class="tbl"><table id="tbl-completo"></table></div>
+      <p class="note" style="margin-top:10px">Considera só os jogos na linha. Clique no nome para ver o histórico do jogador.</p>
+    </div>
+  </section>
+
+  <section class="tab" id="t-destaques">
+    <h2>Destaques</h2>
+    <div class="grid3" id="top5"></div>
+    <div class="grid2" style="margin-top:16px" id="graficos"></div>
+  </section>
+
+  <section class="tab" id="t-jogos">
+    <h2>Jogos</h2>
+    <p class="note">Toque em um jogo para ver as escalações e os gols.</p>
+    <div class="games" id="lista-jogos"></div>
+  </section>
+</main>
+
+<dialog id="dlg"><div class="dlg-h"><h3 id="dlg-t"></h3><button onclick="dlg.close()" aria-label="Fechar">×</button></div><div class="dlg-b" id="dlg-b"></div></dialog>
+
+<footer>Dados lidos da planilha <b id="arq"></b> publicada neste site. Pontuação: vitória 3, empate 1, derrota 0.</footer>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO — altere aqui se precisar
+   ===================================================================== */
+const CONFIG = {
+  titulo: "Jogos 2026",              // nome que aparece no topo
+  arquivo: "Jogos_2026.xlsx",        // nome da planilha enviada ao GitHub
+  minPresencaPadrao: 0.30            // usado só se a planilha não tiver a célula T3 da aba Classificação
+};
+
+/* =====================================================================
+   Leitor de .xlsx sem bibliotecas externas (zip + XML)
+   ===================================================================== */
+async function inflate(bytes){
+  const ds = new DecompressionStream("deflate-raw");
+  const out = new Response(new Blob([bytes]).stream().pipeThrough(ds));
+  return new Uint8Array(await out.arrayBuffer());
+}
+async function unzip(buf){
+  const dv = new DataView(buf), u8 = new Uint8Array(buf), files = {};
+  let eocd = -1;
+  for (let i = buf.byteLength - 22; i >= 0; i--) if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  if (eocd < 0) throw new Error("Arquivo não é um .xlsx válido");
+  let p = dv.getUint32(eocd + 16, true);
+  const n = dv.getUint16(eocd + 10, true), td = new TextDecoder();
+  for (let k = 0; k < n; k++) {
+    const method = dv.getUint16(p + 10, true), csize = dv.getUint32(p + 20, true);
+    const nlen = dv.getUint16(p + 28, true), elen = dv.getUint16(p + 30, true), clen = dv.getUint16(p + 32, true);
+    const off = dv.getUint32(p + 42, true);
+    const name = td.decode(u8.subarray(p + 46, p + 46 + nlen));
+    const start = off + 30 + dv.getUint16(off + 26, true) + dv.getUint16(off + 28, true);
+    files[name] = { method, data: u8.subarray(start, start + csize) };
+    p += 46 + nlen + elen + clen;
+  }
+  return {
+    async text(name){
+      const f = files[name]; if (!f) return null;
+      const raw = f.method === 0 ? f.data : await inflate(f.data);
+      return td.decode(raw);
+    }
+  };
+}
+const xml = s => new DOMParser().parseFromString(s, "application/xml");
+const tags = (node, t) => Array.from(node.getElementsByTagName(t));
+function colNum(ref){ let n = 0; for (const ch of ref.replace(/\d+/g, "")) n = n * 26 + ch.charCodeAt(0) - 64; return n; }
+
+async function readWorkbook(buf){
+  const z = await unzip(buf);
+  const ss = [];
+  const sst = await z.text("xl/sharedStrings.xml");
+  if (sst) for (const si of tags(xml(sst), "si")) ss.push(tags(si, "t").map(t => t.textContent).join(""));
+  const wb = xml(await z.text("xl/workbook.xml"));
+  const rels = xml(await z.text("xl/_rels/workbook.xml.rels"));
+  const relMap = {};
+  for (const r of tags(rels, "Relationship")) relMap[r.getAttribute("Id")] = r.getAttribute("Target");
+  const sheets = {};
+  for (const s of tags(wb, "sheet")) {
+    const rid = s.getAttribute("r:id") || s.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "id");
+    let target = relMap[rid]; if (!target) continue;
+    target = target.startsWith("/") ? target.slice(1) : "xl/" + target;
+    sheets[s.getAttribute("name")] = target;
+  }
+  return {
+    names: Object.keys(sheets),
+    async sheet(name){
+      if (!sheets[name]) return null;
+      const doc = xml(await z.text(sheets[name])), rows = {};
+      for (const c of tags(doc, "c")) {
+        const ref = c.getAttribute("r"), t = c.getAttribute("t");
+        const v = c.getElementsByTagName("v")[0];
+        let val = null;
+        if (t === "s") val = v ? ss[+v.textContent] : null;
+        else if (t === "inlineStr") val = tags(c, "t").map(x => x.textContent).join("");
+        else if (t === "str" || t === "e") val = v ? v.textContent : null;
+        else if (t === "b") val = v ? v.textContent === "1" : null;
+        else val = v ? +v.textContent : null;
+        if (val === "" || val === null) continue;
+        const r = +ref.replace(/[A-Z]+/g, "");
+        (rows[r] ||= {})[colNum(ref)] = val;
+      }
+      return rows;
+    }
+  };
+}
+
+/* =====================================================================
+   Utilidades
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const pct = (x, d = 0) => (x * 100).toFixed(d).replace(".", ",") + "%";
+const dec = (x, d = 2) => x.toFixed(d).replace(".", ",");
+const serialToDate = n => new Date(Math.round((n - 25569) * 86400000));
+const fmtData = d => d.toLocaleDateString("pt-BR", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" });
+const fmtDia = d => d.toLocaleDateString("pt-BR", { timeZone: "UTC", weekday: "short" }).replace(".", "");
+const norm = s => String(s ?? "").trim();
+const cmpNome = (a, b) => a.nome.localeCompare(b.nome, "pt-BR", { sensitivity: "base" });
+const R6 = x => Math.round(x * 1e6);
+
+/* =====================================================================
+   Carregar e calcular
+   ===================================================================== */
+let S = null; // estado global com os dados calculados
+
+async function carregar(){
+  $("#arq").textContent = CONFIG.arquivo;
+  document.title = CONFIG.titulo;
+  $("#titulo").textContent = "⚽ " + CONFIG.titulo;
+  const resp = await fetch(CONFIG.arquivo + "?v=" + Date.now(), { cache: "no-store" });
+  if (!resp.ok) throw new Error(`Não encontrei o arquivo "${CONFIG.arquivo}" (erro ${resp.status}). Confira se ele foi enviado para o repositório com esse nome exato.`);
+  const wb = await readWorkbook(await resp.arrayBuffer());
+
+  // --- Lançamentos
+  const L = await wb.sheet("Lançamentos");
+  if (!L) throw new Error('A planilha não tem a aba "Lançamentos".');
+  const head = {};
+  for (const [c, v] of Object.entries(L[1] || {})) head[norm(v).toLowerCase()] = +c;
+  const col = nome => head[nome.toLowerCase()];
+  const need = ["Data", "Time", "Jogador"];
+  for (const n of need) if (!col(n)) throw new Error(`A aba Lançamentos precisa da coluna "${n}".`);
+  const linhas = [];
+  for (const [r, row] of Object.entries(L)) {
+    if (+r === 1) continue;
+    const d = row[col("Data")], time = norm(row[col("Time")]);
+    if (typeof d !== "number" || !time) continue;
+    const g = row[col("Gols")], og = row[col("Gol Contra")], cam = row[col("Nº Camisa")];
+    linhas.push({
+      r: +r, data: d, time: time === "Azul" ? "Azul" : time === "Verde" ? "Verde" : time,
+      nome: norm(row[col("Jogador")]),
+      gol: norm(row[col("Goleiro")]).toLowerCase() === "sim",
+      cam: typeof cam === "number" ? cam : "",
+      gols: typeof g === "number" ? g : 0,
+      og: typeof og === "number" ? og : 0,
+      adv: norm(row[col("Advertência Uniforme")]).toLowerCase() === "sim",
+    });
+  }
+  linhas.sort((a, b) => a.r - b.r);
+
+  // --- Cadastro de jogadores (tipo)
+  const tipo = {};
+  const J = await wb.sheet("Jogadores");
+  if (J) for (const [r, row] of Object.entries(J)) if (+r > 1 && row[1]) tipo[norm(row[1])] = norm(row[2]) || "Fixo";
+
+  // --- Mínimo de presença (aba Classificação, célula T3)
+  let minPct = CONFIG.minPresencaPadrao;
+  const C = await wb.sheet("Classificação");
+  if (C && C[3] && typeof C[3][20] === "number") minPct = C[3][20];
+
+  // --- Jogos
+  const datas = [...new Set(linhas.map(l => l.data))].sort((a, b) => a - b);
+  const jogos = datas.map((d, i) => {
+    const ls = linhas.filter(l => l.data === d);
+    const gA = ls.filter(l => l.time === "Azul").reduce((s, l) => s + l.gols, 0) + ls.filter(l => l.time === "Verde").reduce((s, l) => s + l.og, 0);
+    const gV = ls.filter(l => l.time === "Verde").reduce((s, l) => s + l.gols, 0) + ls.filter(l => l.time === "Azul").reduce((s, l) => s + l.og, 0);
+    return { n: i + 1, d, date: serialToDate(d), gA, gV, venc: gA > gV ? "Azul" : gV > gA ? "Verde" : "Empate", linhas: ls };
+  });
+  const jogoDe = Object.fromEntries(jogos.map(j => [j.d, j]));
+  const total = jogos.length;
+  const minJogos = minPct * total;
+
+  // --- Estatísticas por jogador
+  const P = {};
+  const get = nome => (P[nome] ||= { nome, tipo: tipo[nome] || "Fixo", hist: [],
+    L: { j: 0, v: 0, e: 0, d: 0, gols: 0 }, G: { j: 0, v: 0, e: 0, d: 0, gs: 0 }, og: 0, adv: 0 });
+  for (const nome of Object.keys(tipo)) get(nome);
+  const avisos = [];
+  for (const l of linhas) {
+    const jg = jogoDe[l.data];
+    const pro = l.time === "Azul" ? jg.gA : jg.gV, contra = l.time === "Azul" ? jg.gV : jg.gA;
+    const res = pro > contra ? "v" : pro === contra ? "e" : "d";
+    if (!l.nome) { if (l.gols || l.og) avisos.push(`${fmtData(jg.date)}: gol ou gol contra lançado sem jogador (linha ${l.r}).`); continue; }
+    const p = get(l.nome);
+    const b = l.gol ? p.G : p.L;
+    b.j++; b[res]++;
+    if (l.gol) p.G.gs += contra; else p.L.gols += l.gols;
+    p.og += l.og; if (l.adv) p.adv++;
+    p.hist.push({ jogo: jg, time: l.time, gol: l.gol, gols: l.gols, og: l.og, res, cam: l.cam });
+    if (!tipo[l.nome]) avisos.push(`"${l.nome}" está nos lançamentos mas não está cadastrado na aba Jogadores.`);
+  }
+  for (const jg of jogos) {
+    for (const t of ["Azul", "Verde"]) {
+      const gk = jg.linhas.filter(l => l.time === t && l.gol).length;
+      if (gk === 0) avisos.push(`${fmtData(jg.date)}: time ${t} sem goleiro marcado (coluna "Goleiro" = Sim). Os jogos do goleiro estão contando como linha.`);
+      if (gk > 1) avisos.push(`${fmtData(jg.date)}: time ${t} com ${gk} goleiros marcados.`);
+    }
+  }
+  const players = Object.values(P).map(p => {
+    const L_ = p.L, G_ = p.G;
+    L_.pts = L_.v * 3 + L_.e; L_.aprov = L_.j ? L_.pts / (L_.j * 3) : 0; L_.gpj = L_.j ? L_.gols / L_.j : 0;
+    L_.pres = total ? L_.j / total : 0; L_.ok = L_.j > 0 && L_.j >= minJogos - 1e-9;
+    G_.pts = G_.v * 3 + G_.e; G_.aprov = G_.j ? G_.pts / (G_.j * 3) : 0; G_.media = G_.j ? G_.gs / G_.j : 0;
+    G_.pres = total ? G_.j / total : 0; G_.ok = G_.j > 0 && G_.j >= minJogos - 1e-9;
+    p.jt = L_.j + G_.j;
+    return p;
+  });
+  S = { linhas, jogos, total, minPct, minJogos, players, avisos: [...new Set(avisos)] };
+}
+
+/* =====================================================================
+   Rankings (mesmos critérios da planilha)
+   ===================================================================== */
+const by = (...fs) => (a, b) => { for (const f of fs) { const r = f(a, b); if (r) return r; } return cmpNome(a, b); };
+const desc = f => (a, b) => f(b) - f(a);
+const RANK = {
+  aprov: by(desc(p => +p.L.ok), desc(p => R6(p.L.aprov)), desc(p => p.L.j), desc(p => p.L.gols)),
+  pts:   by(desc(p => +p.L.ok), desc(p => p.L.pts), desc(p => R6(p.L.aprov)), desc(p => p.L.j)),
+  gols:  by(desc(p => +p.L.ok), desc(p => p.L.gols), desc(p => R6(p.L.aprov)), desc(p => p.L.j)),
+  gpts:  by(desc(p => +p.G.ok), desc(p => p.G.pts), desc(p => R6(p.G.aprov)), desc(p => p.G.j)),
+  gaprov:by(desc(p => +p.G.ok), desc(p => R6(p.G.aprov)), desc(p => p.G.j), desc(p => -R6(p.G.media))),
+  gvaz:  by(desc(p => +p.G.ok), desc(p => -R6(p.G.media)), desc(p => p.G.j)),
+};
+const linha = () => S.players.filter(p => p.L.j > 0);
+const gks = () => S.players.filter(p => p.G.j > 0);
+const nomeHTML = p => `<span class="pl ${p.tipo === "Convidado" ? "conv" : ""}" data-p="${esc(p.nome)}">${esc(p.nome)}</span>`;
+
+function rankingCard(titulo, ico, lista, cols, okFn, limite = 10){
+  const id = "rk" + Math.random().toString(36).slice(2, 8);
+  const rows = lista.map((p, i) => {
+    const ok = okFn(p), pos = i + 1;
+    const cls = !ok ? "inel" : pos <= 3 ? "p" + pos : "";
+    return `<tr class="${cls}" ${i >= limite ? 'data-extra hidden' : ""}><td><span class="pos">${pos}</span></td><td class="n">${nomeHTML(p)}</td>${
+      cols.map((c, k) => `<td class="${k === 0 ? "main" : ""}">${c[1](p)}</td>`).join("")}</tr>`;
+  }).join("");
+  return `<div class="card"><h3><span class="ico">${ico}</span>${titulo}</h3><div class="tbl"><table id="${id}">
+    <thead><tr><th>#</th><th class="n">Jogador</th>${cols.map(c => `<th>${c[0]}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>
+    ${lista.length > limite ? `<button class="more" data-tbl="${id}">Ver todos (${lista.length})</button>` : ""}</div>`;
+}
+
+function renderClassif(){
+  const L = p => p.L, ok = p => p.L.ok;
+  const base = [["J", p => L(p).j], ["V", p => L(p).v], ["E", p => L(p).e], ["D", p => L(p).d]];
+  $("#classif").innerHTML =
+    rankingCard("Aproveitamento", "🎯", linha().sort(RANK.aprov),
+      [["Aprov.", p => pct(L(p).aprov, 1)], ...base, ["Pts", p => L(p).pts], ["Gols", p => L(p).gols]], ok) +
+    rankingCard("Pontos", "🏅", linha().sort(RANK.pts),
+      [["Pts", p => L(p).pts], ...base, ["Aprov.", p => pct(L(p).aprov)], ["Gols", p => L(p).gols]], ok) +
+    rankingCard("Artilharia", "⚽", linha().sort(RANK.gols),
+      [["Gols", p => L(p).gols], ["J", p => L(p).j], ["Média", p => dec(L(p).gpj)], ["Pts", p => L(p).pts], ["Aprov.", p => pct(L(p).aprov)]], ok);
+  $("#nota-classif").innerHTML = `Considera só os jogos na linha. Mínimo de presença: <b>${pct(S.minPct)}</b> dos jogos (${Math.ceil(S.minJogos - 1e-9)} de ${S.total}). ` +
+    `Quem não atingiu aparece no fim, em <i style="color:var(--cinza)">cinza</i>. Convidados em <span class="conv">laranja</span>.`;
+  const G = p => p.G, okg = p => p.G.ok;
+  const gb = [["J", p => G(p).j], ["V", p => G(p).v], ["E", p => G(p).e], ["D", p => G(p).d]];
+  $("#goleiros").innerHTML =
+    rankingCard("Pontos", "🏅", gks().sort(RANK.gpts), [["Pts", p => G(p).pts], ...gb, ["Aprov.", p => pct(G(p).aprov)], ["GS", p => G(p).gs]], okg) +
+    rankingCard("Aproveitamento", "🎯", gks().sort(RANK.gaprov), [["Aprov.", p => pct(G(p).aprov, 1)], ...gb, ["Pts", p => G(p).pts], ["Média GS", p => dec(G(p).media)]], okg) +
+    rankingCard("Menos vazados", "🧱", gks().sort(RANK.gvaz), [["Média GS", p => dec(G(p).media)], ["J", p => G(p).j], ["GS", p => G(p).gs], ["Pts", p => G(p).pts], ["Aprov.", p => pct(G(p).aprov)]], okg);
+  $("#nota-gol").innerHTML = `Considera só os jogos no gol. GS = gols sofridos; Média GS = gols sofridos por jogo (menor é melhor). Mesmo mínimo de presença: ${pct(S.minPct)} dos jogos.`;
+}
+
+/* ---------- Ranking completo com filtros ---------- */
+const COLS = [
+  ["j", "J", p => p.L.j], ["pres", "Pres.", p => p.L.pres, pct], ["aprov", "Aprov.", p => p.L.aprov, x => pct(x, 1)],
+  ["pts", "Pts", p => p.L.pts], ["gols", "Gols", p => p.L.gols], ["gpj", "Média", p => p.L.gpj, dec],
+  ["v", "V", p => p.L.v], ["e", "E", p => p.L.e], ["d", "D", p => p.L.d],
+];
+function renderCompleto(){
+  const busca = $("#f-busca").value.trim().toLowerCase(), ord = $("#f-ord").value, dir = $("#f-dir").value;
+  const tp = $("#f-tipo").value, pmin = +$("#f-pres").value / 100;
+  $("#f-pres-v").textContent = pct(pmin);
+  let l = linha().filter(p => (!busca || p.nome.toLowerCase().includes(busca)) && (!tp || p.tipo === tp) && p.L.pres >= pmin - 1e-9);
+  if (ord === "nome") l.sort(cmpNome);
+  else { const f = COLS.find(c => c[0] === ord)[2]; l.sort(by(desc(f), desc(p => p.L.j))); }
+  if (dir === "asc") l.reverse();
+  $("#tbl-completo").innerHTML = `<thead><tr><th>#</th><th class="n sort" data-o="nome">Jogador</th>${
+    COLS.map(c => `<th class="sort" data-o="${c[0]}">${c[1]}${ord === c[0] ? (dir === "desc" ? " ▼" : " ▲") : ""}</th>`).join("")}</tr></thead><tbody>${
+    l.map((p, i) => `<tr class="${p.L.ok ? "" : "inel"}"><td><span class="pos">${i + 1}</span></td><td class="n">${nomeHTML(p)}</td>${
+      COLS.map(c => `<td class="${c[0] === ord ? "main" : ""}">${(c[3] || (x => x))(c[2](p))}</td>`).join("")}</tr>`).join("") ||
+      `<tr><td colspan="11">Nenhum jogador com esses filtros.</td></tr>`}</tbody>`;
+}
+
+/* ---------- Destaques ---------- */
+function top5(titulo, ico, lista, val){
+  return `<div class="card top5"><h3><span class="ico">${ico}</span>${titulo}</h3><ol>${
+    lista.slice(0, 5).map(p => `<li>${nomeHTML(p)}<b>${val(p)}</b></li>`).join("")}</ol></div>`;
+}
+function bars(titulo, lista, val, fmt, cor, max){
+  const m = max ?? Math.max(...lista.map(val), 1e-9);
+  return `<div class="card"><h3>${titulo}</h3><div class="bars">${lista.map(p =>
+    `<div class="row"><span class="n">${nomeHTML(p)}</span><span class="bar"><i style="width:${val(p) / m * 100}%;background:${cor}"></i></span><span class="v">${fmt(val(p))}</span></div>`).join("")}</div></div>`;
+}
+function renderDestaques(){
+  const ok = linha().filter(p => p.L.ok);
+  const maiorGoleada = [...S.jogos].sort((a, b) => Math.abs(b.gA - b.gV) - Math.abs(a.gA - a.gV))[0];
+  const maisGols = [...S.jogos].sort((a, b) => (b.gA + b.gV) - (a.gA + a.gV))[0];
+  const j = g => `${fmtData(g.date)} · Azul ${g.gA} x ${g.gV} Verde`;
+  $("#top5").innerHTML =
+    top5("Mais vitórias", "🏆", linha().sort(by(desc(p => p.L.v), desc(p => p.L.aprov))), p => p.L.v) +
+    top5("Mais derrotas", "💥", linha().sort(by(desc(p => p.L.d))), p => p.L.d) +
+    top5("Melhor média de gols", "🎯", ok.sort(by(desc(p => p.L.gpj))), p => dec(p.L.gpj)) +
+    top5("Mais presentes", "📅", S.players.filter(p => p.jt).sort(by(desc(p => p.jt))), p => `${p.jt} de ${S.total}`) +
+    top5("Mais advertências de uniforme", "👕", S.players.filter(p => p.adv).sort(by(desc(p => p.adv))), p => p.adv) +
+    `<div class="card top5"><h3><span class="ico">📌</span>Recordes</h3><ol style="list-style:none;padding:0">
+      ${maiorGoleada ? `<li class="rec"><span>Maior diferença</span><b>${j(maiorGoleada)}</b></li>` : ""}
+      ${maisGols ? `<li class="rec"><span>Jogo com mais gols</span><b>${j(maisGols)}</b></li>` : ""}
+      <li><span>Média de gols por jogo</span><b>${S.total ? dec(S.jogos.reduce((s, g) => s + g.gA + g.gV, 0) / S.total, 1) : "-"}</b></li></ol></div>`;
+  const pres = S.players.filter(p => p.jt).sort(by(desc(p => p.jt)));
+  const vedHTML = `<div class="card"><h3>Vitórias, empates e derrotas (linha)</h3>
+    <div class="legend"><span><i style="background:var(--verde)"></i>Vitórias</span><span><i style="background:var(--cinza)"></i>Empates</span><span><i style="background:var(--red)"></i>Derrotas</span></div>
+    <div class="bars">${linha().sort(by(desc(p => p.L.j), desc(p => p.L.v))).map(p => {
+      const t = Math.max(...linha().map(q => q.L.j));
+      return `<div class="row"><span class="n">${nomeHTML(p)}</span><span class="bar">
+        <i style="width:${p.L.v / t * 100}%;background:var(--verde)"></i><i style="width:${p.L.e / t * 100}%;background:var(--cinza)"></i><i style="width:${p.L.d / t * 100}%;background:var(--red)"></i></span>
+        <span class="v">${p.L.v}-${p.L.e}-${p.L.d}</span></div>`; }).join("")}</div></div>`;
+  $("#graficos").innerHTML =
+    bars("Presença (todos os jogos)", pres, p => p.jt / S.total, x => pct(x), "var(--navy2)", 1) +
+    bars("Aproveitamento (linha, com mínimo de presença)", ok.sort(RANK.aprov), p => p.L.aprov, x => pct(x), "var(--ouro)", 1) +
+    bars("Artilharia", linha().filter(p => p.L.gols).sort(RANK.gols), p => p.L.gols, x => x, "var(--verde)") +
+    vedHTML;
+}
+
+/* ---------- Jogos ---------- */
+function renderJogos(){
+  const li = l => `<li><span><span class="num">${l.cam || ""}</span>${l.nome ? nomeHTML(S.players.find(p => p.nome === l.nome) || { nome: l.nome }) : "<i>sem nome</i>"}${l.gol ? " 🧤" : ""}</span>
+    <span>${"⚽".repeat(Math.min(l.gols, 8))}${l.gols > 8 ? "×" + l.gols : ""}${l.og ? ` <span class="og">${l.og} contra</span>` : ""}</span></li>`;
+  $("#lista-jogos").innerHTML = [...S.jogos].reverse().map(g => {
+    const a = g.linhas.filter(l => l.time === "Azul").sort((x, y) => y.gol - x.gol);
+    const v = g.linhas.filter(l => l.time === "Verde").sort((x, y) => y.gol - x.gol);
+    return `<details class="game"><summary><div class="d">Jogo ${g.n} · ${fmtDia(g.date)} ${fmtData(g.date)}</div>
+      <div class="team a ${g.venc === "Azul" ? "win" : ""}">Azul</div><div class="score">${g.gA} x ${g.gV}</div><div class="team v ${g.venc === "Verde" ? "win" : ""}">Verde</div></summary>
+      <div class="lineups"><ul class="a">${a.map(li).join("")}</ul><ul class="v">${v.map(li).join("")}</ul></div></details>`;
+  }).join("");
+}
+
+/* ---------- KPIs ---------- */
+function renderKPIs(){
+  const vA = S.jogos.filter(g => g.venc === "Azul").length, vV = S.jogos.filter(g => g.venc === "Verde").length;
+  const emp = S.total - vA - vV, gA = S.jogos.reduce((s, g) => s + g.gA, 0), gV = S.jogos.reduce((s, g) => s + g.gV, 0);
+  const ult = S.jogos[S.jogos.length - 1];
+  $("#atualizado").textContent = ult ? `Atualizado até ${fmtData(ult.date)} · ${S.total} jogos` : "Sem jogos lançados";
+  const k = (l, v, s = "", c = "") => `<div class="kpi ${c}"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  $("#kpis").innerHTML = k("Jogos", S.total, `${S.players.filter(p => p.jt).length} jogadores diferentes`) +
+    k("Vitórias Azul", vA, S.total ? pct(vA / S.total) : "", "azul") + k("Vitórias Verde", vV, S.total ? pct(vV / S.total) : "", "verde") +
+    k("Empates", emp, S.total ? pct(emp / S.total) : "", "emp") + k("Gols", gA + gV, `Azul ${gA} · Verde ${gV}`) +
+    (ult ? k("Último jogo", `${ult.gA} x ${ult.gV}`, `${fmtData(ult.date)} · ${ult.venc === "Empate" ? "Empate" : "Vitória " + ult.venc}`) : "");
+}
+
+/* ---------- Ficha do jogador ---------- */
+function abrirJogador(nome){
+  const p = S.players.find(x => x.nome === nome); if (!p) return;
+  $("#dlg-t").innerHTML = `${esc(p.nome)} ${p.tipo === "Convidado" ? '<span class="badge">Convidado</span>' : ""}`;
+  const m = (v, l) => `<div><b>${v}</b><span>${l}</span></div>`;
+  let h = "";
+  if (p.L.j) h += `<h3>Na linha</h3><div class="mini">${m(p.L.j, "jogos")}${m(p.L.gols, "gols")}${m(p.L.pts, "pontos")}${m(pct(p.L.aprov), "aproveit.")}
+    ${m(`${p.L.v}-${p.L.e}-${p.L.d}`, "V-E-D")}${m(dec(p.L.gpj), "gols/jogo")}${m(pct(p.L.pres), "presença")}${m(p.og, "gols contra")}</div>`;
+  if (p.G.j) h += `<h3>No gol 🧤</h3><div class="mini">${m(p.G.j, "jogos")}${m(p.G.pts, "pontos")}${m(pct(p.G.aprov), "aproveit.")}${m(dec(p.G.media), "gols sofr./jogo")}</div>`;
+  h += `<h3>Jogos</h3><div class="tbl"><table><thead><tr><th>Data</th><th>Time</th><th>Placar</th><th>Res.</th><th>Gols</th></tr></thead><tbody>${
+    [...p.hist].reverse().map(x => `<tr><td>${fmtData(x.jogo.date)}</td><td><span class="badge ${x.time === "Azul" ? "az" : "vd"}">${x.time}${x.gol ? " 🧤" : ""}</span></td>
+      <td>${x.jogo.gA} x ${x.jogo.gV}</td><td class="res-${x.res.toUpperCase()}">${{ v: "V", e: "E", d: "D" }[x.res]}</td><td>${x.gols || ""}${x.og ? ` <span class="og">(${x.og} contra)</span>` : ""}</td></tr>`).join("")}</tbody></table></div>`;
+  $("#dlg-b").innerHTML = h;
+  dlg.showModal();
+}
+
+/* ---------- Eventos ---------- */
+function ligarEventos(){
+  $("#tabs").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("on", x === b));
+    document.querySelectorAll("section.tab").forEach(s => s.classList.toggle("on", s.id === "t-" + b.dataset.t));
+    history.replaceState(null, "", "#" + b.dataset.t);
+  });
+  const h = location.hash.slice(1); if (h) document.querySelector(`#tabs button[data-t="${h}"]`)?.click();
+  document.body.addEventListener("click", e => {
+    const pl = e.target.closest(".pl"); if (pl) { abrirJogador(pl.dataset.p); return; }
+    const mo = e.target.closest(".more");
+    if (mo) { const t = document.getElementById(mo.dataset.tbl); const show = mo.dataset.open !== "1";
+      t.querySelectorAll("tr[data-extra]").forEach(r => r.hidden = !show); mo.dataset.open = show ? "1" : "0";
+      mo.textContent = show ? "Mostrar menos" : `Ver todos (${t.tBodies[0].rows.length})`; }
+    const th = e.target.closest("#tbl-completo th.sort");
+    if (th) { const o = th.dataset.o; if ($("#f-ord").value === o) $("#f-dir").value = $("#f-dir").value === "desc" ? "asc" : "desc";
+      else { $("#f-ord").value = o; $("#f-dir").value = o === "nome" ? "asc" : "desc"; } renderCompleto(); }
+  });
+  ["#f-busca", "#f-ord", "#f-dir", "#f-tipo", "#f-pres"].forEach(s => $(s).addEventListener("input", renderCompleto));
+  $("#f-limpar").addEventListener("click", () => { $("#f-busca").value = ""; $("#f-ord").value = "pts"; $("#f-dir").value = "desc"; $("#f-tipo").value = ""; $("#f-pres").value = 0; renderCompleto(); });
+}
+
+(async () => {
+  try {
+    await carregar();
+    renderKPIs(); renderClassif(); renderCompleto(); renderDestaques(); renderJogos();
+    if (S.avisos.length) $("#avisos").innerHTML = `<div class="warn"><b>⚠ Conferir na planilha:</b><ul>${S.avisos.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>`;
+    ligarEventos();
+  } catch (e) {
+    console.error(e);
+    $("#err").style.display = "block";
+    $("#err").innerHTML = `<b>Não foi possível carregar os dados.</b><br>${esc(e.message)}` +
+      (location.protocol === "file:" ? "<br><br>Abrindo o arquivo direto do computador o navegador bloqueia a leitura da planilha. Publique no GitHub Pages (veja o LEIA-ME)." : "");
+  } finally { $("#loading").style.display = "none"; }
+})();
+</script>
+</body>
+</html>
