@@ -198,7 +198,10 @@ dialog::backdrop{background:rgba(10,18,35,.55)}
    ===================================================================== */
 const CONFIG = {
   titulo: "Menos Velozes Mais Furiosos - Estatísticas 2026",              // nome que aparece no topo
-  arquivo: "Jogos_2026.xlsx",        // nome da planilha enviada ao GitHub
+  // Link da planilha Google publicada como .xlsx (Arquivo > Compartilhar > Publicar na Web).
+  // Deixe "" para usar só o arquivo do GitHub.
+  planilhaGoogle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCrC9HlllZPge60YIzAV2Rmu5fCu1sSUwoc_cM_C2f04tlPS2nF8HHqCfNc-skQt6aQtvcBZYj-T4d/pub?output=xlsx",
+  arquivo: "Jogos_2026.xlsx",        // reserva: planilha enviada ao GitHub
   minPresencaPadrao: 0.30            // usado só se a planilha não tiver a célula T3 da aba Classificação
 };
 
@@ -300,9 +303,19 @@ async function carregar(){
   $("#arq").textContent = CONFIG.arquivo;
   document.title = CONFIG.titulo;
   $("#titulo").textContent = CONFIG.titulo;
-  const resp = await fetch(CONFIG.arquivo + "?v=" + Date.now(), { cache: "no-store" });
-  if (!resp.ok) throw new Error(`Não encontrei o arquivo "${CONFIG.arquivo}" (erro ${resp.status}). Confira se ele foi enviado para o repositório com esse nome exato.`);
-  const wb = await readWorkbook(await resp.arrayBuffer());
+  const comVersao = u => u + (u.includes("?") ? "&" : "?") + "v=" + Date.now();
+  let wb = null, falhas = [];
+  for (const [url, nome] of [[CONFIG.planilhaGoogle, "planilha Google"], [CONFIG.arquivo, CONFIG.arquivo]]) {
+    if (!url) continue;
+    try {
+      const resp = await fetch(comVersao(url), { cache: "no-store" });
+      if (!resp.ok) throw new Error("erro " + resp.status);
+      wb = await readWorkbook(await resp.arrayBuffer());
+      $("#arq").textContent = nome;
+      break;
+    } catch (e) { falhas.push(`${nome}: ${e.message}`); }
+  }
+  if (!wb) throw new Error("Não consegui ler a planilha (" + falhas.join(" | ") + "). Confira o link da planilha Google ou se o arquivo foi enviado ao GitHub.");
 
   // --- Lançamentos
   const L = await wb.sheet("Lançamentos");
